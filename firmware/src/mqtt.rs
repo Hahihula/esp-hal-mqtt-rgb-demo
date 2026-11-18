@@ -92,6 +92,9 @@ pub async fn mqtt_task(stack: Stack<'static>, name: &'static str) {
 
     loop {
         stack.wait_config_up().await;
+        if let Some(config) = stack.config_v4() {
+            info!("Got IP address {}", config.address);
+        }
         if let Err(e) = session(stack, name, &mut rx_buffer, &mut tx_buffer, &mut color).await {
             warn!("MQTT: {e}, reconnecting in 5 s");
         }

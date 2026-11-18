@@ -9,7 +9,6 @@
 
 use embassy_executor::Spawner;
 use embassy_net::StackResources;
-use embassy_time::{Duration, Timer};
 use esp_backtrace as _;
 use esp_hal::{clock::CpuClock, rmt::Rmt, rng::Rng, time::Rate, timer::timg::TimerGroup};
 use esp_hal_smartled::{RmtSmartLeds, WS2812B_TIMING};
@@ -106,12 +105,8 @@ async fn main(spawner: Spawner) -> ! {
     spawner.spawn(wifi::net_task(runner).unwrap());
     spawner.spawn(mqtt::mqtt_task(stack, name.as_str()).unwrap());
 
-    stack.wait_config_up().await;
-    if let Some(config) = stack.config_v4() {
-        info!("Got IP address {}", config.address);
-    }
-
+    // Everything runs in the tasks now; `main` has nothing left to do.
     loop {
-        Timer::after(Duration::from_secs(60)).await;
+        core::future::pending::<()>().await;
     }
 }
