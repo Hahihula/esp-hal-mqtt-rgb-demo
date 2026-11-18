@@ -1,0 +1,43 @@
+# Keep compilation settings in this file and user/runtime settings in `esp-config.toml`.
+include = ["esp-config.toml"]
+
+[target.riscv32imc-unknown-none-elf]
+runner = "espflash flash --monitor"
+
+[target.riscv32imac-unknown-none-elf]
+runner = "espflash flash --monitor"
+
+[target.riscv32imafc-unknown-none-elf]
+runner = "espflash flash --monitor"
+
+[build]
+rustflags = [
+  # Required to obtain backtraces (e.g. when using the "esp-backtrace" crate.)
+  # NOTE: May negatively impact performance of produced code
+  "-C", "force-frame-pointers",
+]
+
+[unstable]
+build-std = ["alloc", "core"]
+
+# One build/run pair per board. `cargo run-<board>` builds, flashes and opens the monitor.
+# Pass the Wi-Fi network in the environment: SSID=MyWifi PASSWORD=secret cargo run-c6
+[alias]
+# ESP32-S31-Function-CoreBoard-1: RGB LED GPIO60
+build-s31       = ["build", "--release", "--target", "riscv32imafc-unknown-none-elf", "--features", "s31-function-coreboard"]
+run-s31         = ["run",   "--release", "--target", "riscv32imafc-unknown-none-elf", "--features", "s31-function-coreboard"]
+# ESP32-S31-Korvo-1: RGB LED GPIO37
+build-korvo     = ["build", "--release", "--target", "riscv32imafc-unknown-none-elf", "--features", "s31-korvo"]
+run-korvo       = ["run",   "--release", "--target", "riscv32imafc-unknown-none-elf", "--features", "s31-korvo"]
+# ESP32-C6-DevKitC-1: RGB LED GPIO8
+build-c6        = ["build", "--release", "--target", "riscv32imac-unknown-none-elf",  "--features", "c6-devkitc"]
+run-c6          = ["run",   "--release", "--target", "riscv32imac-unknown-none-elf",  "--features", "c6-devkitc"]
+# ESP32-C5-DevKitC-1: RGB LED GPIO27
+build-c5        = ["build", "--release", "--target", "riscv32imac-unknown-none-elf",  "--features", "c5-devkitc"]
+run-c5          = ["run",   "--release", "--target", "riscv32imac-unknown-none-elf",  "--features", "c5-devkitc"]
+# ESP32-C3-DevKit-RUST-1: RGB LED GPIO2
+build-c3        = ["build", "--release", "--target", "riscv32imc-unknown-none-elf",   "--features", "c3-rust-board"]
+run-c3          = ["run",   "--release", "--target", "riscv32imc-unknown-none-elf",   "--features", "c3-rust-board"]
+# ESP32-C3-LCDkit: RGB LED GPIO8
+build-c3-lcdkit = ["build", "--release", "--target", "riscv32imc-unknown-none-elf",   "--features", "c3-lcdkit"]
+run-c3-lcdkit   = ["run",   "--release", "--target", "riscv32imc-unknown-none-elf",   "--features", "c3-lcdkit"]

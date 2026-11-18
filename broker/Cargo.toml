@@ -1,0 +1,21 @@
+[package]
+name        = "workshop-broker"
+version     = "0.1.0"
+edition     = "2024"
+publish     = false
+description = "Offline backup for the esp-hal workshop: an MQTT broker that also serves the web page."
+license     = "MIT OR Apache-2.0"
+
+[[bin]]
+name = "workshop-broker"
+path = "src/main.rs"
+
+[[bin]]
+name = "fake-device"
+path = "src/bin/fake-device.rs"
+
+[dependencies]
+embedded-io-adapters = { version = "0.7", features = ["tokio-1"] }
+rumqttd              = { version = "0.20", default-features = false, features = ["websocket"] }
+rust-mqtt            = { version = "0.6", features = ["log"] }
+tokio                = { version = "1", features = ["macros", "net", "rt-multi-thread", "time"] }

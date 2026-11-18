@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>esp-hal workshop: RGB LED room</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>esp-hal workshop: RGB LED room</h1>
+    <form id="connect-form">
+      <label>Room
+        <input id="room" required pattern="[A-Za-z0-9_\-]{1,32}" title="Letters, digits, - and _ (up to 32)" value="lobby">
+      </label>
+      <label>Broker
+        <select id="broker"></select>
+      </label>
+      <label id="custom-label" hidden>Broker URL
+        <input id="custom-url" placeholder="wss://host:port/mqtt">
+      </label>
+      <button id="connect" type="submit">Join room</button>
+      <span id="status" class="status">Not connected</span>
+    </form>
+  </header>
+
+  <main>
+    <section class="card all" id="all-card" hidden>
+      <h2>All boards in the room</h2>
+      <div class="controls" data-target="all"></div>
+    </section>
+
+    <p id="empty" hidden>No boards in this room yet. Flash a board with <code>ROOM=<span id="room-hint"></span></code> and it shows up here.</p>
+
+    <section id="boards" class="boards"></section>
+
+    <p class="actions" id="actions" hidden>
+      <label><input type="checkbox" id="show-offline"> Show offline boards</label>
+      <button id="clear-offline" type="button">Remove offline boards from the room</button>
+    </p>
+  </main>
+
+  <footer>
+    Topics: <code id="topic-hint">esp-hal-workshop/&lt;room&gt;/#</code>.
+    This page talks to a public MQTT broker: anyone can see and send these messages, so don't send anything private.
+  </footer>
+
+  <template id="board-template">
+    <article class="card board">
+      <h2><span class="dot"></span><span class="name"></span></h2>
+      <p class="state"></p>
+      <div class="controls"></div>
+    </article>
+  </template>
+
+  <script src="vendor/mqtt.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
